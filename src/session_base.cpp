@@ -379,19 +379,27 @@ void zmq::session_base_t::start_connecting (bool wait_)
     zmq_assert (io_thread);
 
     //  Create the connecter object.
+    std::string proto = protocol;
+    std::string addr = address;
 
-    if (protocol == "tcp") {
+    if (protocol == "dns") {
+        //  TODO: Resolve the address using DNS.
+        int rc = socket_base_t::parse_uri (address.c_str (), proto, addr);
+        errno_assert (rc == 0);
+    }
+
+    if (proto == "tcp") {
         tcp_connecter_t *connecter = new (std::nothrow) tcp_connecter_t (
-            io_thread, this, options, address.c_str (), wait_);
+            io_thread, this, options, addr.c_str (), wait_);
         alloc_assert (connecter);
         launch_child (connecter);
         return;
     }
 
 #if !defined ZMQ_HAVE_WINDOWS && !defined ZMQ_HAVE_OPENVMS
-    if (protocol == "ipc") {
+    if (proto == "ipc") {
         ipc_connecter_t *connecter = new (std::nothrow) ipc_connecter_t (
-            io_thread, this, options, address.c_str (), wait_);
+            io_thread, this, options, addr.c_str (), wait_);
         alloc_assert (connecter);
         launch_child (connecter);
         return;
@@ -399,10 +407,10 @@ void zmq::session_base_t::start_connecting (bool wait_)
 #endif
 
 #if defined ZMQ_HAVE_VTCP
-    if (protocol == "vtcp") {
+    if (proto == "vtcp") {
 
         vtcp_connecter_t *connecter = new (std::nothrow) vtcp_connecter_t (
-            io_thread, this, options, address.c_str (),
+            io_thread, this, options, addr.c_str (),
             wait_);
         alloc_assert (connecter);
         launch_child (connecter);
@@ -413,10 +421,10 @@ void zmq::session_base_t::start_connecting (bool wait_)
 #if defined ZMQ_HAVE_OPENPGM
 
     //  Both PGM and EPGM transports are using the same infrastructure.
-    if (protocol == "pgm" || protocol == "epgm") {
+    if (proto == "pgm" || proto == "epgm") {
 
         //  For EPGM transport with UDP encapsulation of PGM is used.
-        bool udp_encapsulation = (protocol == "epgm");
+        bool udp_encapsulation = (proto == "epgm");
 
         //  At this point we'll create message pipes to the session straight
         //  away. There's no point in delaying it as no concept of 'connect'
@@ -428,7 +436,7 @@ void zmq::session_base_t::start_connecting (bool wait_)
                 io_thread, options);
             alloc_assert (pgm_sender);
 
-            int rc = pgm_sender->init (udp_encapsulation, address.c_str ());
+            int rc = pgm_sender->init (udp_encapsulation, addr.c_str ());
             zmq_assert (rc == 0);
 
             send_attach (this, pgm_sender);
@@ -440,7 +448,7 @@ void zmq::session_base_t::start_connecting (bool wait_)
                 io_thread, options);
             alloc_assert (pgm_receiver);
 
-            int rc = pgm_receiver->init (udp_encapsulation, address.c_str ());
+            int rc = pgm_receiver->init (udp_encapsulation, addr.c_str ());
             zmq_assert (rc == 0);
 
             send_attach (this, pgm_receiver);

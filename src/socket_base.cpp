@@ -174,6 +174,9 @@ int zmq::socket_base_t::parse_uri (const char *uri_,
 
 int zmq::socket_base_t::check_protocol (const std::string &protocol_)
 {
+    if (protocol_ == "dns")
+        return 0;
+
     //  First check out whether the protcol is something we are aware of.
     if (protocol_ != "inproc" && protocol_ != "ipc" && protocol_ != "tcp" &&
           protocol_ != "pgm" && protocol_ != "epgm" && protocol_ != "sys" &&
@@ -339,6 +342,11 @@ int zmq::socket_base_t::bind (const char *addr_)
     int rc = parse_uri (addr_, protocol, address);
     if (rc != 0)
         return -1;
+
+    if (protocol == "dns") {
+        //  TODO: Resolve address part using DNS.
+        return bind (address.c_str ());
+    }
 
     rc = check_protocol (protocol);
     if (rc != 0)

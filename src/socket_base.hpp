@@ -90,6 +90,10 @@ namespace zmq
         void hiccuped (pipe_t *pipe_);
         void terminated (pipe_t *pipe_);
 
+        //  Parse URI string.
+        static int parse_uri (const char *uri_, std::string &protocol_,
+            std::string &address_);
+
     protected:
 
         socket_base_t (class ctx_t *parent_, uint32_t tid_);
@@ -142,10 +146,6 @@ namespace zmq
         //  destruction is delayed while we unwind the stack to the point
         //  where it doesn't intersect the object being destroyed.
         bool destroyed;
-
-        //  Parse URI string.
-        int parse_uri (const char *uri_, std::string &protocol_,
-            std::string &address_);
 
         //  Check whether transport protocol, as specified in connect or
         //  bind, is available and compatible with the socket type.
