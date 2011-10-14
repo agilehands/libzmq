@@ -29,7 +29,7 @@ AC_SUBST(PACKAGE_VERSION)
 # ZeroMQ version 2.1.0: 1:0:0
 #
 # libzmq -version-info current:revision:age
-LTVER="1:0:0"
+LTVER="3:0:0"
 AC_SUBST(LTVER)
 
 # Take a copy of original flags
