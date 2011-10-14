@@ -64,10 +64,10 @@ LIBZMQ_WITH_GCOV
 AC_CHECK_LIB([pthread], [pthread_create])
 
 # Set pedantic
-libzmq_pedantic="yes"
+libzmq_pedantic="no"
 
 # By default compiling with -Werror except OSX.
-libzmq_werror="yes"
+libzmq_werror="no"
 
 # By default use DSO visibility
 libzmq_dso_visibility="yes"
