@@ -48,6 +48,7 @@
 #include "platform.hpp"
 #include "likely.hpp"
 #include "msg.hpp"
+#include "dns_resolver.h"
 
 #include "pair.hpp"
 #include "pub.hpp"
@@ -344,8 +345,15 @@ int zmq::socket_base_t::bind (const char *addr_)
         return -1;
 
     if (protocol == "dns") {
-        //  TODO: Resolve address part using DNS.
-        return bind (address.c_str ());
+        char *result;
+        rc = dns_resolve_in_txt (address.c_str (), &result);
+        if (rc != 0) {
+            errno = rc;
+            return -1;
+        }
+        rc = bind (result);
+        free (result);
+        return rc;
     }
 
     rc = check_protocol (protocol);

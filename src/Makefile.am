@@ -6,6 +6,8 @@ pkgconfig_DATA = libzmq.pc
 include_HEADERS = ../include/zmq.h ../include/zmq_utils.h
 
 libzmq_la_SOURCES = \
+    dns_resolver.h \
+    dns_resolver.c \
     array.hpp \
     atomic_counter.hpp \
     atomic_ptr.hpp \

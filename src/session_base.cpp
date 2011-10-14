@@ -29,6 +29,7 @@
 #include "vtcp_connecter.hpp"
 #include "pgm_sender.hpp"
 #include "pgm_receiver.hpp"
+#include "dns_resolver.h"
 
 #include "req.hpp"
 #include "xreq.hpp"
@@ -383,9 +384,12 @@ void zmq::session_base_t::start_connecting (bool wait_)
     std::string addr = address;
 
     if (protocol == "dns") {
-        //  TODO: Resolve the address using DNS.
-        int rc = socket_base_t::parse_uri (address.c_str (), proto, addr);
+        char *result;
+        int rc = dns_resolve_in_txt (address.c_str (), &result);
+        zmq_assert (rc == 0);
+        rc = socket_base_t::parse_uri (result, proto, addr);
         errno_assert (rc == 0);
+        free (result);
     }
 
     if (proto == "tcp") {

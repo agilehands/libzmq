@@ -12,7 +12,9 @@ EXTRA_DIST = \
 	autogen.sh	\
 	version.sh	\
 	MAINTAINERS	\
-	foreign/openpgm/@pgm_basename@.tar.gz
+	foreign/openpgm/@pgm_basename@.tar.gz \
+        foreign/dns/dns.c \
+        foreign/dns/dns.h
 MAINTAINERCLEANFILES = \
 	$(srcdir)/aclocal.m4		\
 	$(srcdir)/autom4te.cache	\
