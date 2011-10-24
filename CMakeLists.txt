@@ -18,7 +18,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 EXECUTE_PROCESS(COMMAND ./autogen.sh)
 EXECUTE_PROCESS(COMMAND ./configure)
-EXECUTE_PROCESS(COMMAND ./make)
+EXECUTE_PROCESS(COMMAND make -f Makefilezmq)
 
 #uncomment if you have defined messages
 #rosbuild_genmsg()
