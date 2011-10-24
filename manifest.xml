@@ -1,0 +1,16 @@
+<package>
+  <description brief="libzmq">
+
+     libzmq
+
+  </description>
+  <author>Shaikh Sonny Aman</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/libzmq</url>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+
