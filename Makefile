@@ -1,1 +1,4 @@
-include $(shell rospack find mk)/cmake.mk
+all:
+	./autogen.sh
+	./cinfigure
+	make -f Makefilezmq
