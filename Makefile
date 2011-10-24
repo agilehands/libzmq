@@ -1,4 +1,4 @@
 all:
 	./autogen.sh
-	./cinfigure
+	./configure
 	make -f Makefilezmq
